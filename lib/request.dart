@@ -40,6 +40,10 @@ Future<String> obtainSTPConfig() async {
   }
 }
 
+Future<bool> isScriptRunning() async {
+  return false;
+}
+
 Future<STPConfig> loadSTPConfig(String path) async {
   var params = Map<String, String>();
   params["path"] = path;

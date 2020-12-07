@@ -18,7 +18,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SubConfigModel(context)),
-        ChangeNotifierProvider(create: (context) => STPModel(context)),
+        ChangeNotifierProvider(create: (_) => STPModel()),
+        ChangeNotifierProvider(create: (_) => STPConfModel()),
+        ChangeNotifierProvider(create: (_) => STPStateModel()),
       ],
       child: MaterialApp(
         title: 'Proxy Config',

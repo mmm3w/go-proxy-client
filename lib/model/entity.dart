@@ -8,17 +8,19 @@ class SubConfig {
 }
 
 class STPConfig {
-  String mode;
-  bool tcponly;
-  bool selfonly;
-  String proxy_svraddr4;
-  String proxy_svrport;
-  String proxy_startcmd;
-  String proxy_stopcmd;
-  bool dnsmasq_log_enable;
-  bool chinadns_verbose;
-  bool dns2tcp_verbose;
-  String file_ignlist_ext;
+  STPConfig();
+
+  String mode = "";
+  bool tcponly = false;
+  bool selfonly = false;
+  String proxy_svraddr4 = "";
+  String proxy_svrport = "";
+  String proxy_startcmd = "";
+  String proxy_stopcmd = "";
+  bool dnsmasq_log_enable = false;
+  bool chinadns_verbose = false;
+  bool dns2tcp_verbose = false;
+  String file_ignlist_ext = "";
 
   STPConfig.fromJson(Map<String, dynamic> json)
       : mode = json['mode'],
