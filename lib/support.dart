@@ -38,7 +38,7 @@ titleText(String title) {
 showSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(text),
-    duration: Duration(milliseconds: 400),
+    duration: Duration(milliseconds: 1000),
   ));
 }
 
