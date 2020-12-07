@@ -18,7 +18,7 @@ Future saveConfig(String url, String path) async {
   params["url"] = url;
   params["path"] = path;
   var response =
-      await http.post(Uri.parse("http://localhost/subConfig"), body: params);
+  await http.post(Uri.parse("http://localhost/subConfig"), body: params);
   if (response.statusCode != 200) {
     throw response.body;
   }
