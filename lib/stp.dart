@@ -123,7 +123,9 @@ class STPConfWidget extends StatelessWidget {
                         disabledTextColor: Colors.grey[450],
                         onPressed: Provider.of<STPStateModel>(context).isRunning
                             ? null
-                            : () {}),
+                            : () {
+                                stp.autoServerSet(context);
+                              }),
                   ],
                 ),
                 SizedBox(height: 16.0),
@@ -133,7 +135,7 @@ class STPConfWidget extends StatelessWidget {
                       child: TextField(
                         style: TextStyle(color: Colors.black54),
                         decoration: textDecoration("备选代理服务器端口"),
-                        maxLines: 2,
+                        maxLines: 5,
                         minLines: 1,
                         controller: stp.portController,
                         enabled: !Provider.of<STPStateModel>(context).isRunning,
@@ -148,7 +150,9 @@ class STPConfWidget extends StatelessWidget {
                         disabledTextColor: Colors.grey[450],
                         onPressed: Provider.of<STPStateModel>(context).isRunning
                             ? null
-                            : () {}),
+                            : () {
+                                stp.autoPortSet(context);
+                              }),
                   ],
                 ),
                 SizedBox(height: 16.0),

@@ -3,7 +3,8 @@ import "package:http/http.dart" as http;
 import 'model/entity.dart';
 
 // var domain = "http://localhost";
-var domain = "http://192.168.0.34";
+var domain = "http://10.233.1.3";
+// var domain = "http://192.168.0.34";
 
 Future<SubConfig> obtainSub() async {
   Map<String, dynamic> result;
@@ -92,6 +93,25 @@ Future<STPConfig> loadSTPConfig(String path) async {
   }
   return STPConfig.fromJson(result);
 }
+
+Future<String> obtainServerSet() async{
+  var response = await http.get(Uri.parse(domain + "/serverSet"));
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw response.body;
+  }
+}
+
+Future<String> obtainPortSet() async{
+  var response = await http.get(Uri.parse(domain + "/portSet"));
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw response.body;
+  }
+}
+
 
 Future saveSTPConfig(STPConfig config) async {
   var params = Map<String, String>();

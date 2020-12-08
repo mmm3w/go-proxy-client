@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'widget/listmanager.dart';
 import 'model/stpmodel.dart';
 import 'model/subconfigmodel.dart';
 import 'model/v2raymodel.dart';
@@ -19,7 +19,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => SubConfigModel(context)),
+        Provider<ListManager>(create: (_) => ListManager()),
+        Provider<SubConfigModel>(create: (_) => SubConfigModel()),
         ChangeNotifierProvider(create: (_) => STPModel()),
         ChangeNotifierProvider(create: (_) => STPConfModel()),
         ChangeNotifierProvider(create: (_) => STPStateModel()),
@@ -36,7 +37,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class MyHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -44,19 +44,14 @@ class MyHome extends StatelessWidget {
       appBar: AppBar(
         title: Text("代理配置"),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SubConfigWidget(),
-              SizedBox(height: 16.0),
-              V2rayWidget(),
-              SizedBox(height: 16.0),
-              STPWidget(),
-            ],
+      body: Container(
+        margin: EdgeInsets.all(16.0),
+        child: Consumer<ListManager>(
+          builder: (context, manager, child) => ListView.builder(
+            itemCount: manager.itemCount,
+            itemBuilder: (context, index) {
+              return manager.createWidget(context, index);
+            },
           ),
         ),
       ),

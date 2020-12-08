@@ -7,50 +7,48 @@ import 'support.dart';
 class SubConfigWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
-    mainAxisSize: MainAxisSize.min,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      titleText("订阅配置"),
-      SizedBox(height: 16.0),
-      Consumer<SubConfigModel>(
-        builder: (context, sub, child) => TextField(
-          controller: sub.urlController,
-          style: TextStyle(color: Colors.black54),
-          decoration: textDecoration("代理订阅地址"),
-        ),
-      ),
-      SizedBox(height: 16.0),
-      Consumer<SubConfigModel>(
-        builder: (context, sub, child) => TextField(
-          controller: sub.pathController,
-          style: TextStyle(color: Colors.black54),
-          decoration: textDecoration("配置保存路径"),
-        ),
-      ),
-      SizedBox(height: 16.0),
-      Row(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          FlatButton(
-            child: Text("保存配置"),
-            color: Colors.blue,
-            textColor: Colors.white,
-            onPressed: () {
-              context.read<SubConfigModel>().save(context);
-            },
+          titleText("订阅配置"),
+          SizedBox(height: 16.0),
+          TextField(
+            controller: Provider.of<SubConfigModel>(context, listen: false)
+                .urlController,
+            style: TextStyle(color: Colors.black54),
+            decoration: textDecoration("代理订阅地址"),
           ),
-          SizedBox(width: 16.0),
-          FlatButton(
-            child: Text("更新订阅"),
-            color: Colors.blue,
-            textColor: Colors.white,
-            onPressed: () {
-              context.read<SubConfigModel>().update(context);
-            },
+          SizedBox(height: 16.0),
+          TextField(
+            controller: Provider.of<SubConfigModel>(context, listen: false)
+                .pathController,
+            style: TextStyle(color: Colors.black54),
+            decoration: textDecoration("配置保存路径"),
+          ),
+          SizedBox(height: 16.0),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              FlatButton(
+                child: Text("保存配置"),
+                color: Colors.blue,
+                textColor: Colors.white,
+                onPressed: () {
+                  context.read<SubConfigModel>().save(context);
+                },
+              ),
+              SizedBox(width: 16.0),
+              FlatButton(
+                child: Text("更新订阅"),
+                color: Colors.blue,
+                textColor: Colors.white,
+                onPressed: () {
+                  context.read<SubConfigModel>().update(context);
+                },
+              ),
+            ],
           ),
         ],
-      ),
-    ],
-  );
+      );
 }

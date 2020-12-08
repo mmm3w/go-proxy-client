@@ -86,6 +86,28 @@ class STPModel with ChangeNotifier {
     notifyListeners();
   }
 
+  autoServerSet(BuildContext context){
+    showLoading(context);
+    obtainServerSet()
+    .then((value) => serverController.text = value)
+    .catchError((e) => showSnackBar(context, e.toString()))
+        .whenComplete(() {
+      Navigator.of(context).pop(1);
+      notifyListeners();
+    });
+  }
+
+  autoPortSet(BuildContext context){
+    showLoading(context);
+    obtainPortSet()
+        .then((value) => portController.text = value)
+        .catchError((e) => showSnackBar(context, e.toString()))
+        .whenComplete(() {
+      Navigator.of(context).pop(1);
+      notifyListeners();
+    });
+  }
+
   load(BuildContext context, String path) {
     showLoading(context);
     loadSTPConfig(path)
