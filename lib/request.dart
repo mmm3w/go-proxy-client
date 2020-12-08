@@ -2,8 +2,8 @@ import 'dart:convert';
 import "package:http/http.dart" as http;
 import 'model/entity.dart';
 
-
-var domain = "http://localhost";
+// var domain = "http://localhost";
+var domain = "http://192.168.0.34";
 
 Future<SubConfig> obtainSub() async {
   Map<String, dynamic> result;
@@ -21,7 +21,7 @@ Future saveConfig(String url, String path) async {
   params["url"] = url;
   params["path"] = path;
   var response =
-  await http.post(Uri.parse(domain + "/subConfig"), body: params);
+      await http.post(Uri.parse(domain + "/subConfig"), body: params);
   if (response.statusCode != 200) {
     throw response.body;
   }
@@ -44,19 +44,101 @@ Future<String> obtainSTPConfig() async {
 }
 
 Future<bool> isScriptRunning() async {
-  return false;
+  var response = await http.get(Uri.parse(domain + "/tproxyStatus"));
+  if (response.statusCode == 200) {
+    Map<String, dynamic> status = json.decode(response.body);
+    int count = 0;
+    status.forEach((key, value) {
+      if (!key.contains("pxy") && (value as bool)) {
+        count++;
+      }
+    });
+    return count == 3;
+  } else {
+    throw response.body;
+  }
+}
+
+Future<Map<String, dynamic>> scriptStatus() async {
+  var response = await http.get(Uri.parse(domain + "/tproxyStatus"));
+  if (response.statusCode == 200) {
+    Map<String, dynamic> status = json.decode(response.body);
+    return status;
+  } else {
+    throw response.body;
+  }
+}
+
+controlScript(bool isRunning) async {
+  var response;
+  if (isRunning) {
+    response = await http.post(Uri.parse(domain + "/tproxyStop"));
+  } else {
+    response = await http.post(Uri.parse(domain + "/tproxyStart"));
+  }
+  if (response.statusCode != 200) {
+    throw response.body;
+  }
 }
 
 Future<STPConfig> loadSTPConfig(String path) async {
-  var params = Map<String, String>();
-  params["path"] = path;
   Map<String, dynamic> result;
-  var response = await http
-      .get(Uri.parse(domain + "/tproxyConfig?path="+path));
+  var response =
+      await http.get(Uri.parse(domain + "/tproxyConfig?path=" + path));
   if (response.statusCode == 200) {
     result = json.decode(response.body);
   } else {
     throw response.body;
   }
   return STPConfig.fromJson(result);
+}
+
+Future saveSTPConfig(STPConfig config) async {
+  var params = Map<String, String>();
+  params["data"] = json.encode(config);
+  var response =
+      await http.post(Uri.parse(domain + "/tproxyConfig"), body: params);
+  if (response.statusCode != 200) {
+    throw response.body;
+  }
+}
+
+Future<String> obtainV2rayConfigPath() async {
+  var response = await http.get(Uri.parse(domain + "/v2rayConfigPath"));
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw response.body;
+  }
+}
+
+Future saveV2rayConfigPath(String path) async {
+  var params = Map<String, String>();
+  params["path"] = path;
+  var response =
+      await http.post(Uri.parse(domain + "/v2rayConfigPath"), body: params);
+  if (response.statusCode != 200) {
+    throw response.body;
+  }
+}
+
+Future<String> v2rayStatus() async {
+  var response = await http.get(Uri.parse(domain + "/v2rayStatus"));
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw response.body;
+  }
+}
+
+controlV2ray(bool isRunning) async {
+  var response;
+  if (isRunning) {
+    response = await http.post(Uri.parse(domain + "/v2rayStop"));
+  } else {
+    response = await http.post(Uri.parse(domain + "/v2rayStart"));
+  }
+  if (response.statusCode != 200) {
+    throw response.body;
+  }
 }

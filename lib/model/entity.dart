@@ -34,4 +34,27 @@ class STPConfig {
         chinadns_verbose = json['chinadns_verbose'],
         dns2tcp_verbose = json['dns2tcp_verbose'],
         file_ignlist_ext = json['file_ignlist_ext'];
+
+
+  Map<String, dynamic> toJson() {
+    return {
+      'mode': mode,
+      'tcponly': tcponly,
+      'selfonly': selfonly,
+      'proxy_svraddr4': proxy_svraddr4,
+      'proxy_svrport': proxy_svrport,
+      'proxy_startcmd': proxy_startcmd,
+      'proxy_stopcmd': proxy_stopcmd,
+      'dnsmasq_log_enable': dnsmasq_log_enable,
+      'chinadns_verbose': chinadns_verbose,
+      'dns2tcp_verbose': dns2tcp_verbose,
+      'file_ignlist_ext': file_ignlist_ext,
+    };
+  }
 }
+
+
+
+
+
+

@@ -38,7 +38,7 @@ titleText(String title) {
 showSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(text),
-    duration: Duration(milliseconds: 1000),
+    duration: Duration(milliseconds: 2000),
   ));
 }
 
@@ -62,4 +62,32 @@ showLoading(BuildContext context) {
       );
     },
   );
+}
+
+showStatusDialog(BuildContext context, Map<String, dynamic> status) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text("脚本状态"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: statusItem(status),
+        ),
+      );
+    },
+  );
+}
+
+List<Widget> statusItem(Map<String, dynamic> status){
+  var list  = <Widget>[];
+  status.forEach((key, value) { 
+    list.add(Row(
+      children: [
+       Text(key),
+        Text((value as bool)? "运行中":"未运行")
+      ],
+    ));
+  });
+  return list;
 }
