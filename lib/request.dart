@@ -3,8 +3,8 @@ import "package:http/http.dart" as http;
 import 'model/entity.dart';
 
 // var domain = "http://localhost";
-var domain = "http://10.233.1.3";
-// var domain = "http://192.168.0.34";
+// var domain = "http://10.233.1.3";
+var domain = "http://192.168.0.34";
 
 Future<SubConfig> obtainSub() async {
   Map<String, dynamic> result;
@@ -94,7 +94,7 @@ Future<STPConfig> loadSTPConfig(String path) async {
   return STPConfig.fromJson(result);
 }
 
-Future<String> obtainServerSet() async{
+Future<String> obtainServerSet() async {
   var response = await http.get(Uri.parse(domain + "/serverSet"));
   if (response.statusCode == 200) {
     return response.body;
@@ -103,7 +103,7 @@ Future<String> obtainServerSet() async{
   }
 }
 
-Future<String> obtainPortSet() async{
+Future<String> obtainPortSet() async {
   var response = await http.get(Uri.parse(domain + "/portSet"));
   if (response.statusCode == 200) {
     return response.body;
@@ -111,7 +111,6 @@ Future<String> obtainPortSet() async{
     throw response.body;
   }
 }
-
 
 Future saveSTPConfig(STPConfig config) async {
   var params = Map<String, String>();
@@ -159,6 +158,16 @@ controlV2ray(bool isRunning) async {
     response = await http.post(Uri.parse(domain + "/v2rayStart"));
   }
   if (response.statusCode != 200) {
+    throw response.body;
+  }
+}
+
+Future<List<V2rayServer>> obtainConfigSet() async {
+  var response = await http.get(Uri.parse(domain + "/configSet"));
+  if (response.statusCode == 200) {
+    List responseJson = json.decode(response.body);
+    return responseJson.map((m) => V2rayServer.fromJson(m)).toList();
+  } else {
     throw response.body;
   }
 }

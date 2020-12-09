@@ -1,16 +1,14 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 import '../request.dart';
 import '../support.dart';
 
 class SubConfigModel {
-  SubConfigModel( ) {
-    obtainSub()
-        .then((value) {
-          urlController.text = value.url;
-          pathController.text = value.path;
-        });
+  SubConfigModel() {
+    obtainSub().then((value) {
+      urlController.text = value.url;
+      pathController.text = value.path;
+    }).catchError((_) {});
   }
 
   TextEditingController urlController = TextEditingController(text: "");

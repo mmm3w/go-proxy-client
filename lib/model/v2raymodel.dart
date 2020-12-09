@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_proxy_client/request.dart';
+import 'package:go_proxy_client/widget/listmanager.dart';
+import 'package:provider/provider.dart';
 
 import '../support.dart';
+import 'entity.dart';
 
 class V2rayModel with ChangeNotifier {
   V2rayModel() {
@@ -43,5 +46,23 @@ class V2rayModel with ChangeNotifier {
         .then((_) => showSnackBar(context, "保存成功"))
         .catchError((e) => showSnackBar(context, e.toString()))
         .whenComplete(() => Navigator.of(context).pop(1));
+  }
+
+  change(BuildContext context) {
+    if (Provider.of<ListManager>(context, listen: false).itemCount > 4) {
+      Provider.of<ListManager>(context, listen: false).clearServerItem();
+    } else {
+      showLoading(context);
+      obtainConfigSet()
+          .then((value) => Provider.of<ListManager>(context, listen: false)
+              .showServerItem(value))
+          .catchError((e) => showSnackBar(context, e.toString()))
+          .whenComplete(() => Navigator.of(context).pop(1));
+    }
+  }
+
+  post(BuildContext context, V2rayServer data) {
+    if (Provider.of<ListManager>(context, listen: false).itemCount <= 4) return;
+    Provider.of<ListManager>(context, listen: false).clearServerItem();
   }
 }

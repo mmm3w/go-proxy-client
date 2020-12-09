@@ -4,22 +4,23 @@ import '../request.dart';
 import '../support.dart';
 import 'entity.dart';
 
-class STPConfModel with ChangeNotifier {
-  STPConfModel() {
+class STPConfigPathModel {
+  STPConfigPathModel() {
     obtainSTPConfig()
         .then((value) => confPathController.text = value)
-        .whenComplete(() => notifyListeners());
+        .catchError((_) {});
   }
 
   TextEditingController confPathController = TextEditingController(text: "");
+
+  String get configPath => confPathController.text;
 }
 
-class STPStateModel with ChangeNotifier {
-  STPStateModel() {
+class STPStatusModel with ChangeNotifier {
+  STPStatusModel() {
     isScriptRunning()
         .then((value) => isRunning = value)
-        .catchError((_) => isRunning = false)
-        .whenComplete(() => notifyListeners());
+        .catchError((_) => isRunning = false);
   }
 
   bool isRunning = false;
@@ -45,7 +46,7 @@ class STPStateModel with ChangeNotifier {
     }).catchError((e) {
       Navigator.of(context).pop(1);
       showSnackBar(context, e.toString());
-    }).whenComplete(() => notifyListeners());
+    });
   }
 }
 
@@ -53,13 +54,13 @@ class STPModel with ChangeNotifier {
   STPModel();
 
   STPConfig config;
-  TextEditingController serverController;
-  TextEditingController portController;
-  TextEditingController startCmdController;
-  TextEditingController stopCmdController;
+  TextEditingController serverController = TextEditingController(text: "");
+  TextEditingController portController = TextEditingController(text: "");
+  TextEditingController startCmdController = TextEditingController(text: "");
+  TextEditingController stopCmdController = TextEditingController(text: "");
 
-  TextEditingController ignIpController;
-  TextEditingController ignDomainController;
+  TextEditingController ignIpController = TextEditingController(text: "");
+  TextEditingController ignDomainController = TextEditingController(text: "");
 
   tcpOnlySwitch(bool value) {
     config.tcponly = value;
@@ -86,18 +87,18 @@ class STPModel with ChangeNotifier {
     notifyListeners();
   }
 
-  autoServerSet(BuildContext context){
+  autoServerSet(BuildContext context) {
     showLoading(context);
     obtainServerSet()
-    .then((value) => serverController.text = value)
-    .catchError((e) => showSnackBar(context, e.toString()))
+        .then((value) => serverController.text = value)
+        .catchError((e) => showSnackBar(context, e.toString()))
         .whenComplete(() {
       Navigator.of(context).pop(1);
       notifyListeners();
     });
   }
 
-  autoPortSet(BuildContext context){
+  autoPortSet(BuildContext context) {
     showLoading(context);
     obtainPortSet()
         .then((value) => portController.text = value)
@@ -113,11 +114,10 @@ class STPModel with ChangeNotifier {
     loadSTPConfig(path)
         .then((value) {
           config = value;
-          serverController = TextEditingController(text: config.proxy_svraddr4);
-          portController = TextEditingController(text: config.proxy_svrport);
-          startCmdController =
-              TextEditingController(text: config.proxy_startcmd);
-          stopCmdController = TextEditingController(text: config.proxy_stopcmd);
+          serverController.text = config.proxy_svraddr4;
+          portController.text = config.proxy_svrport;
+          startCmdController.text = config.proxy_startcmd;
+          stopCmdController.text = config.proxy_stopcmd;
         })
         .catchError((e) => showSnackBar(context, e.toString()))
         .whenComplete(() {
@@ -136,8 +136,6 @@ class STPModel with ChangeNotifier {
     saveSTPConfig(config)
         .then((value) => showSnackBar(context, "保存成功"))
         .catchError((e) => showSnackBar(context, e.toString()))
-        .whenComplete(() {
-      Navigator.of(context).pop(1);
-    });
+        .whenComplete(() => Navigator.of(context).pop(1));
   }
 }

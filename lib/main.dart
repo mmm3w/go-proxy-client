@@ -5,9 +5,6 @@ import 'widget/listmanager.dart';
 import 'model/stpmodel.dart';
 import 'model/subconfigmodel.dart';
 import 'model/v2raymodel.dart';
-import 'stp.dart';
-import 'subconfig.dart';
-import 'v2ray.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,12 +16,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<ListManager>(create: (_) => ListManager()),
+        ChangeNotifierProvider<ListManager>(create: (_) => ListManager()),
         Provider<SubConfigModel>(create: (_) => SubConfigModel()),
-        ChangeNotifierProvider(create: (_) => STPModel()),
-        ChangeNotifierProvider(create: (_) => STPConfModel()),
-        ChangeNotifierProvider(create: (_) => STPStateModel()),
         ChangeNotifierProvider(create: (_) => V2rayModel()),
+        Provider<STPConfigPathModel>(create: (_) => STPConfigPathModel()),
+        ChangeNotifierProvider(create: (_) => STPStatusModel()),
+        ChangeNotifierProvider(create: (_) => STPModel()),
       ],
       child: MaterialApp(
         title: 'Proxy Config',
@@ -45,7 +42,7 @@ class MyHome extends StatelessWidget {
         title: Text("代理配置"),
       ),
       body: Container(
-        margin: EdgeInsets.all(16.0),
+        margin: EdgeInsets.all(8.0),
         child: Consumer<ListManager>(
           builder: (context, manager, child) => ListView.builder(
             itemCount: manager.itemCount,
