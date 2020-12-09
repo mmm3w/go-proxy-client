@@ -8,20 +8,24 @@ import 'entity.dart';
 
 class V2rayModel with ChangeNotifier {
   V2rayModel() {
-    v2rayStatus().then((value) => pid = value).whenComplete(() {
-      notifyListeners();
-    });
+    v2rayStatus()
+        .then((value) => pid = value)
+        .whenComplete(() => notifyListeners());
 
-    obtainV2rayConfigPath().then((value) {
-      configPathController.text = value;
-    }).whenComplete(() {
-      notifyListeners();
-    });
+    obtainV2rayConfigPath()
+        .then((value) => configPathController.text = value)
+        .whenComplete(() => notifyListeners());
+
+    obtainV2rayConfigInfo()
+        .then((value) => serverInfo = value)
+        .whenComplete(() => notifyListeners());
   }
 
   TextEditingController configPathController = TextEditingController(text: "");
 
   String pid = "";
+
+  String serverInfo = "";
 
   bool get isRunning => pid.length > 0;
 
@@ -63,6 +67,18 @@ class V2rayModel with ChangeNotifier {
 
   post(BuildContext context, V2rayServer data) {
     if (Provider.of<ListManager>(context, listen: false).itemCount <= 4) return;
-    Provider.of<ListManager>(context, listen: false).clearServerItem();
+    showLoading(context);
+    postV2rayConfig(data)
+        .then((_) {
+          showSnackBar(context, "请重启代理进程");
+          obtainV2rayConfigInfo()
+              .then((value) => serverInfo = value)
+              .whenComplete(() => notifyListeners());
+        })
+        .catchError((e) => showSnackBar(context, e.toString()))
+        .whenComplete(() {
+          Navigator.of(context).pop(1);
+          Provider.of<ListManager>(context, listen: false).clearServerItem();
+        });
   }
 }

@@ -3,8 +3,8 @@ import "package:http/http.dart" as http;
 import 'model/entity.dart';
 
 // var domain = "http://localhost";
-// var domain = "http://10.233.1.3";
-var domain = "http://192.168.0.34";
+var domain = "http://10.233.1.3";
+// var domain = "http://192.168.0.34";
 
 Future<SubConfig> obtainSub() async {
   Map<String, dynamic> result;
@@ -70,7 +70,7 @@ Future<Map<String, dynamic>> scriptStatus() async {
   }
 }
 
-controlScript(bool isRunning) async {
+Future controlScript(bool isRunning) async {
   var response;
   if (isRunning) {
     response = await http.post(Uri.parse(domain + "/tproxyStop"));
@@ -131,6 +131,15 @@ Future<String> obtainV2rayConfigPath() async {
   }
 }
 
+Future<String> obtainV2rayConfigInfo() async {
+  var response = await http.get(Uri.parse(domain + "/v2rayConfigInfo"));
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw response.body;
+  }
+}
+
 Future saveV2rayConfigPath(String path) async {
   var params = Map<String, String>();
   params["path"] = path;
@@ -150,13 +159,23 @@ Future<String> v2rayStatus() async {
   }
 }
 
-controlV2ray(bool isRunning) async {
+Future controlV2ray(bool isRunning) async {
   var response;
   if (isRunning) {
     response = await http.post(Uri.parse(domain + "/v2rayStop"));
   } else {
     response = await http.post(Uri.parse(domain + "/v2rayStart"));
   }
+  if (response.statusCode != 200) {
+    throw response.body;
+  }
+}
+
+Future postV2rayConfig(V2rayServer data) async {
+  var params = Map<String, String>();
+  params["data"] = json.encode(data);
+  var response =
+      await http.post(Uri.parse(domain + "/v2rayConfig"), body: params);
   if (response.statusCode != 200) {
     throw response.body;
   }

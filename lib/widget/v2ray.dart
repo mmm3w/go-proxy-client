@@ -68,9 +68,13 @@ class V2rayWidget extends StatelessWidget {
           ),
           Container(
             margin: EdgeInsets.all(8.0),
-            child: FlatButton(
-              child: Text("当前代理配置：(点击进行切换)"),
-              onPressed: () => context.read<V2rayModel>().change(context),
+            child: Consumer<V2rayModel>(
+              builder: (context, model, child) => FlatButton(
+                child: Text("当前代理配置 : " + model.serverInfo),
+                onPressed: model.isRunning
+                    ? null
+                    : () => context.read<V2rayModel>().change(context),
+              ),
             ),
           ),
         ],
@@ -96,12 +100,8 @@ class V2rayServerItem extends ListItem {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(server.remark),
+                  child: Text(server.ps),
                 ),
-                IconButton(
-                  icon: Icon(Icons.autorenew),
-                  onPressed: () {},
-                )
               ],
             ),
           ),

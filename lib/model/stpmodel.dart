@@ -20,7 +20,8 @@ class STPStatusModel with ChangeNotifier {
   STPStatusModel() {
     isScriptRunning()
         .then((value) => isRunning = value)
-        .catchError((_) => isRunning = false);
+        .catchError((_) => isRunning = false)
+        .whenComplete(() => notifyListeners());
   }
 
   bool isRunning = false;

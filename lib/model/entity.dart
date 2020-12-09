@@ -56,33 +56,41 @@ class V2rayServer {
   String host;
   String path;
   String tls;
-  bool verifyCert;
   String add;
   int port;
   int aid;
   String net;
-  String headerType;
   String v;
   String type;
   String ps;
-  String remark;
   String id;
-  int clz;
 
   V2rayServer.fromJson(Map<String, dynamic> json)
       : host = json['host'],
         path = json['path'],
         tls = json['tls'],
-        verifyCert = json['verify_cert'],
         add = json['add'],
         port = json['port'],
         aid = json['aid'],
         net = json['net'],
-        headerType = json['headerType'],
         v = json['v'],
         type = json['type'],
         ps = json['ps'],
-        remark = json['remark'],
-        id = json['id'],
-        clz = json['class'];
+        id = json['id'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'host': host,
+      'path': path,
+      'tls': tls,
+      'add': add,
+      'port': port,
+      'aid': aid,
+      'net': net,
+      'v': v,
+      'type': type,
+      'ps': ps,
+      'id': id,
+    };
+  }
 }

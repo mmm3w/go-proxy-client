@@ -255,26 +255,22 @@ class STPConfigWidget extends StatelessWidget {
                   margin: EdgeInsets.all(8.0),
                   child: TextField(
                     style: TextStyle(color: Colors.black54),
-                    decoration: textDecoration("ignlist ip列表"),
+                    decoration: textDecoration("ignlist ip列表(未完成功能)"),
                     maxLines: 5,
                     minLines: 1,
                     controller: model.ignIpController,
-                    enabled:
-                        !Provider.of<STPStatusModel>(context, listen: false)
-                            .isRunning,
+                    enabled:false,
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.all(8.0),
                   child: TextField(
                     style: TextStyle(color: Colors.black54),
-                    decoration: textDecoration("ignlist 域名列表"),
+                    decoration: textDecoration("ignlist 域名列表(未完成功能)"),
                     maxLines: 5,
                     minLines: 1,
                     controller: model.ignDomainController,
-                    enabled:
-                        !Provider.of<STPStatusModel>(context, listen: false)
-                            .isRunning,
+                    enabled: false,
                   ),
                 ),
                 Container(
