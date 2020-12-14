@@ -1,10 +1,9 @@
 import 'dart:convert';
 import "package:http/http.dart" as http;
+import 'jssupport.dart' as support;
 import 'model/entity.dart';
 
-// var domain = "http://localhost";
-var domain = "http://10.233.1.3";
-// var domain = "http://192.168.0.34";
+var domain = "http://" + support.domain();
 
 Future<SubConfig> obtainSub() async {
   Map<String, dynamic> result;
