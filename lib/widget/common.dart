@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../model/base.dart';
+import '../model/common.dart';
+import '../model/poster.dart';
+
+class Progress extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ProgressModel>(builder: (context, model, child) {
+      return Offstage(
+        offstage: !model.isVisible,
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.red[100],
+          valueColor: AlwaysStoppedAnimation(Colors.red),
+        ),
+      );
+    });
+  }
+}
 
 //标题
 class TitleItem extends StatelessWidget {
@@ -118,12 +134,11 @@ class EditConfigItem extends StatelessWidget {
           decoration: BoxDecoration(
               border: Border.all(color: Colors.blue, width: 1),
               borderRadius: BorderRadius.all(Radius.circular(5))),
-          child: Consumer<InputModel>(
+          child: Consumer<EditModel>(
             builder: (context, model, child) {
               return TextField(
                 style: TextStyle(fontSize: 13),
-                controller: TextEditingController()
-                  ..text = model.cacheData,
+                controller: TextEditingController()..text = model.cacheData,
                 cursorWidth: 1,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.zero,
@@ -143,17 +158,20 @@ class EditConfigItem extends StatelessWidget {
 //弹窗选择项
 class SelectConfigItem extends StatelessWidget {
   final String name;
-  final String rawData;
 
-  SelectConfigItem(this.name, this.rawData);
+  SelectConfigItem(this.name);
 
   @override
   Widget build(BuildContext context) {
     return ListItem(
       name,
-      TextButton(
-        onPressed: () {},
-        child: Text(this.rawData),
+      Consumer<ServerSelectModel>(
+        builder: (context, model, child) {
+          return TextButton(
+            onPressed: () => model.postData(),
+            child: Text(model.name),
+          );
+        },
       ),
     );
   }
@@ -172,6 +190,29 @@ class ShowConfigItem extends StatelessWidget {
       name,
       Text(
         this.data,
+      ),
+    );
+  }
+}
+
+class SubControlItem extends StatelessWidget {
+  final String mKey;
+
+  SubControlItem(this.mKey);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListItem(
+      "订阅控制",
+      SizedBox(
+        height: 28,
+        child: ElevatedButton(
+          child: Text(
+            "更新订阅",
+            style: TextStyle(fontSize: 12),
+          ),
+          onPressed: () => obtainSubWithAction(context, mKey),
+        ),
       ),
     );
   }

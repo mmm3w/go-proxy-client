@@ -1,5 +1,9 @@
 // import 'dart:convert';
+import 'dart:convert';
+
 import "package:http/http.dart" as http;
+
+import 'entity.dart';
 
 // import 'model/entity.dart';
 //
@@ -27,17 +31,42 @@ Future putValue(String key, String value) async {
   }
 }
 
-//
-// Future<SubConfig> obtainSub() async {
-//   Map<String, dynamic> result;
-//   var response = await http.get(Uri.parse(domain + "/subConfig"));
-//   if (response.statusCode == 200) {
-//     result = json.decode(response.body);
-//   } else {
-//     throw response.body;
-//   }
-//   return SubConfig.fromJson(result);
-// }
+//当前应用的配置文件
+Future<NiData> serverFile(String key) async {
+  var response =
+      await http.get(Uri.parse(domain + "/currentProxyConfig?key=" + key));
+  if (response.statusCode == 200) {
+    Utf8Decoder utf8decoder = Utf8Decoder();
+    return NiData.fromJson(json.decode(utf8decoder.convert(response.bodyBytes)));
+  } else {
+    throw response.body;
+  }
+}
+
+//所有配置列表
+Future<List<NiData>> serverConfig(String type) async {
+  var response =
+      await http.get(Uri.parse(domain + "/proxyConfig?type=" + type));
+  if (response.statusCode == 200) {
+    Utf8Decoder utf8decoder = Utf8Decoder();
+    List responseJson = json.decode(utf8decoder.convert(response.bodyBytes));
+    return responseJson.map((m) => NiData.fromJson(m)).toList();
+  } else {
+    throw response.body;
+  }
+}
+
+Future<String> obtainSub(String type) async {
+  var params = Map<String, String>();
+  params["type"] = type;
+  var response =
+      await http.post(Uri.parse(domain + "/updateSub"), body: params);
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw response.body;
+  }
+}
 //
 // Future saveConfig(String url, String path) async {
 //   var params = Map<String, String>();
