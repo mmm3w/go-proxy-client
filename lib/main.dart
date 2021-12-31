@@ -38,14 +38,22 @@ class MainPage extends StatelessWidget {
                 physics: BouncingScrollPhysics(),
                 children: [
                   TitleItem("通用配置"),
-                  PControlItem("脚本状态"),
+                  ChangeNotifierProvider(
+                    create: (context) => SwitchControlModel(
+                        "script", SwitchControlPoster(context)),
+                    child: PControlItem("脚本状态"),
+                  ),
                   ChangeNotifierProvider(
                     create: (context) =>
                         EditModel("sub_cache_folder", InputPoster(context)),
                     child: EditConfigItem("订阅缓存"),
                   ),
                   TitleItem("V2ray配置"),
-                  PControlItem("运行状态"),
+                  ChangeNotifierProvider(
+                    create: (context) => SwitchControlModel(
+                        "v2ray", SwitchControlPoster(context)),
+                    child: PControlItem("运行状态"),
+                  ),
                   ChangeNotifierProvider(
                     create: (context) =>
                         ServerSelectModel("v2ray", ServerSelectPoster(context)),
@@ -63,7 +71,11 @@ class MainPage extends StatelessWidget {
                   ),
                   SubControlItem("v2ray"),
                   TitleItem("SSR配置"),
-                  PControlItem("运行状态"),
+                  ChangeNotifierProvider(
+                    create: (context) =>
+                        SwitchControlModel("ssr", SwitchControlPoster(context)),
+                    child: PControlItem("运行状态"),
+                  ),
                   ChangeNotifierProvider(
                     create: (context) =>
                         ServerSelectModel("ssr", ServerSelectPoster(context)),

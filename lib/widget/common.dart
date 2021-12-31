@@ -92,29 +92,34 @@ class PControlItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListItem(
       this.name,
-      Row(
-        children: [
-          Switch(
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            value: true,
-            onChanged: (change) {},
-          ),
-          Offstage(
-            offstage: false,
-            child: Text(
-              "pid content",
-              style: TextStyle(color: Colors.green),
-            ), //
-          ),
-          TextButton(
-            child: Text(
-              "强制关闭",
-              style: TextStyle(fontSize: 12),
+      Consumer<SwitchControlModel>(builder: (context, model, child) {
+        return Row(
+          children: [
+            Switch(
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              value: model.isEnable(),
+              onChanged: (change) => model.postData(change),
             ),
-            onPressed: () {},
-          )
-        ],
-      ),
+            Offstage(
+              offstage: false,
+              child: Text(
+                model.pid,
+                style: TextStyle(color: Colors.green),
+              ), //
+            ),
+            IconButton(
+              splashRadius: 18,
+              padding: EdgeInsets.zero,
+              color: Colors.blue,
+              icon: Icon(
+                Icons.refresh_rounded,
+                size: 18,
+              ),
+              onPressed: () => model.refresh(),
+            ),
+          ],
+        );
+      }),
     );
   }
 }

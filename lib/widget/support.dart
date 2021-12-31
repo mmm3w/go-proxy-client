@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,4 +45,11 @@ showServerDialog(
           ),
         );
       });
+}
+
+onUiAction<T>(Future<T> Function() function, BuildContext context) {
+  if (!showLoading(context)) return;
+  function().catchError((err) {
+    showSnackBar(context, err.toString().trim());
+  }).whenComplete(() => hideLoading(context));
 }

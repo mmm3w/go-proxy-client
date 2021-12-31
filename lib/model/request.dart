@@ -1,4 +1,3 @@
-// import 'dart:convert';
 import 'dart:convert';
 
 import "package:http/http.dart" as http;
@@ -8,7 +7,7 @@ import 'entity.dart';
 // import 'model/entity.dart';
 //
 // // var domain = "http://localhost";
-var domain = "http://10.233.1.2:12345";
+var domain = "http://10.233.1.3:12345";
 // // var domain = "http://192.168.0.34";
 
 //
@@ -37,7 +36,8 @@ Future<NiData> serverFile(String key) async {
       await http.get(Uri.parse(domain + "/currentProxyConfig?key=" + key));
   if (response.statusCode == 200) {
     Utf8Decoder utf8decoder = Utf8Decoder();
-    return NiData.fromJson(json.decode(utf8decoder.convert(response.bodyBytes)));
+    return NiData.fromJson(
+        json.decode(utf8decoder.convert(response.bodyBytes)));
   } else {
     throw response.body;
   }
@@ -67,6 +67,42 @@ Future<String> obtainSub(String type) async {
     throw response.body;
   }
 }
+
+Future<List<String>> proxyRunInfo(String type) async {
+  var response =
+      await http.get(Uri.parse(domain + "/proxyRunInfo?type=" + type));
+  if (response.statusCode == 200) {
+    String result = response.body.trim();
+    return result.split(" ");
+  } else {
+    throw response.body;
+  }
+}
+
+Future stopProxy(String type, String pid) async {
+  var params = Map<String, String>();
+  params["type"] = type;
+  params["pid"] = pid;
+  var response =
+      await http.post(Uri.parse(domain + "/stopProxy"), body: params);
+  if (response.statusCode != 200) {
+    throw response.body;
+  }
+}
+
+Future<List<String>> startProxy(String type) async {
+  var params = Map<String, String>();
+  params["type"] = type;
+  var response =
+  await http.post(Uri.parse(domain + "/startProxy"), body: params);
+  if (response.statusCode == 200) {
+    String result = response.body.trim();
+    return result.split(" ");
+  } else {
+    throw response.body;
+  }
+}
+
 //
 // Future saveConfig(String url, String path) async {
 //   var params = Map<String, String>();
