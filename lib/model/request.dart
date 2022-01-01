@@ -2,16 +2,15 @@ import 'dart:convert';
 
 import "package:http/http.dart" as http;
 
+import '../jssupport.dart';
 import '../tool.dart';
 import 'entity.dart';
 
-// import 'model/entity.dart';
-//
-// // var domain = "http://localhost";
-var domain = "http://10.233.1.3:12345";
-// // var domain = "http://192.168.0.34";
+// var domain = "http://localhost";
+// var domain = "http://10.233.1.3:12345";
+// var domain = "http://192.168.0.34";
+var domain = h5Domain();
 
-//
 Future<String> obtainValue(String key) async {
   var response = await http.get(Uri.parse(domain + "/config?key=" + key));
   if (response.statusCode == 200) {
@@ -116,7 +115,7 @@ Future justForward(bool enable) async {
   var params = Map<String, String>();
   params["tag"] = enable ? "1" : "0";
   var response =
-  await http.post(Uri.parse(domain + "/justForward"), body: params);
+      await http.post(Uri.parse(domain + "/justForward"), body: params);
   if (response.statusCode != 200) {
     throw utf8D(response.bodyBytes);
   }

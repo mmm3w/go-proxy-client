@@ -1,3 +1,3 @@
 function obtainDomain(){
-    return window.location.hostname
+    return "http://" + window.location.hostname + ":"+ window.location.port
 }
