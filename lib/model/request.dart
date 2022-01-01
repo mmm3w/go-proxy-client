@@ -2,21 +2,22 @@ import 'dart:convert';
 
 import "package:http/http.dart" as http;
 
+import '../tool.dart';
 import 'entity.dart';
 
 // import 'model/entity.dart';
 //
 // // var domain = "http://localhost";
-var domain = "http://10.233.1.3:12345";
+var domain = "http://10.233.1.2:12345";
 // // var domain = "http://192.168.0.34";
 
 //
 Future<String> obtainValue(String key) async {
   var response = await http.get(Uri.parse(domain + "/config?key=" + key));
   if (response.statusCode == 200) {
-    return response.body;
+    return utf8D(response.bodyBytes);
   } else {
-    throw response.body;
+    throw utf8D(response.bodyBytes);
   }
 }
 
@@ -26,7 +27,7 @@ Future putValue(String key, String value) async {
   params["value"] = value;
   var response = await http.post(Uri.parse(domain + "/config"), body: params);
   if (response.statusCode != 200) {
-    throw response.body;
+    throw utf8D(response.bodyBytes);
   }
 }
 
@@ -35,11 +36,9 @@ Future<NiData> serverFile(String key) async {
   var response =
       await http.get(Uri.parse(domain + "/currentProxyConfig?key=" + key));
   if (response.statusCode == 200) {
-    Utf8Decoder utf8decoder = Utf8Decoder();
-    return NiData.fromJson(
-        json.decode(utf8decoder.convert(response.bodyBytes)));
+    return NiData.fromJson(json.decode(utf8D(response.bodyBytes)));
   } else {
-    throw response.body;
+    throw utf8D(response.bodyBytes);
   }
 }
 
@@ -48,11 +47,10 @@ Future<List<NiData>> serverConfig(String type) async {
   var response =
       await http.get(Uri.parse(domain + "/proxyConfig?type=" + type));
   if (response.statusCode == 200) {
-    Utf8Decoder utf8decoder = Utf8Decoder();
-    List responseJson = json.decode(utf8decoder.convert(response.bodyBytes));
+    List responseJson = json.decode(utf8D(response.bodyBytes));
     return responseJson.map((m) => NiData.fromJson(m)).toList();
   } else {
-    throw response.body;
+    throw utf8D(response.bodyBytes);
   }
 }
 
@@ -62,9 +60,9 @@ Future<String> obtainSub(String type) async {
   var response =
       await http.post(Uri.parse(domain + "/updateSub"), body: params);
   if (response.statusCode == 200) {
-    return response.body;
+    return utf8D(response.bodyBytes);
   } else {
-    throw response.body;
+    throw utf8D(response.bodyBytes);
   }
 }
 
@@ -72,10 +70,10 @@ Future<List<String>> proxyRunInfo(String type) async {
   var response =
       await http.get(Uri.parse(domain + "/proxyRunInfo?type=" + type));
   if (response.statusCode == 200) {
-    String result = response.body.trim();
+    String result = utf8D(response.bodyBytes).trim();
     return result.split(" ");
   } else {
-    throw response.body;
+    throw utf8D(response.bodyBytes);
   }
 }
 
@@ -86,7 +84,7 @@ Future stopProxy(String type, String pid) async {
   var response =
       await http.post(Uri.parse(domain + "/stopProxy"), body: params);
   if (response.statusCode != 200) {
-    throw response.body;
+    throw utf8D(response.bodyBytes);
   }
 }
 
@@ -94,12 +92,33 @@ Future<List<String>> startProxy(String type) async {
   var params = Map<String, String>();
   params["type"] = type;
   var response =
-  await http.post(Uri.parse(domain + "/startProxy"), body: params);
+      await http.post(Uri.parse(domain + "/startProxy"), body: params);
   if (response.statusCode == 200) {
-    String result = response.body.trim();
+    String result = utf8D(response.bodyBytes).trim();
     return result.split(" ");
   } else {
-    throw response.body;
+    throw utf8D(response.bodyBytes);
+  }
+}
+
+Future applyConfig(String type, String data) async {
+  var params = Map<String, String>();
+  params["type"] = type;
+  params["data"] = data;
+  var response =
+      await http.post(Uri.parse(domain + "/applyConfig"), body: params);
+  if (response.statusCode != 200) {
+    throw utf8D(response.bodyBytes);
+  }
+}
+
+Future justForward(bool enable) async {
+  var params = Map<String, String>();
+  params["tag"] = enable ? "1" : "0";
+  var response =
+  await http.post(Uri.parse(domain + "/justForward"), body: params);
+  if (response.statusCode != 200) {
+    throw utf8D(response.bodyBytes);
   }
 }
 

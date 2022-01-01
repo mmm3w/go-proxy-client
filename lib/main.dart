@@ -37,7 +37,7 @@ class MainPage extends StatelessWidget {
               ListView(
                 physics: BouncingScrollPhysics(),
                 children: [
-                  TitleItem("通用配置"),
+                  TitleItem("脚本配置"),
                   ChangeNotifierProvider(
                     create: (context) => SwitchControlModel(
                         "script", SwitchControlPoster(context)),
@@ -45,8 +45,13 @@ class MainPage extends StatelessWidget {
                   ),
                   ChangeNotifierProvider(
                     create: (context) =>
-                        EditModel("sub_cache_folder", InputPoster(context)),
-                    child: EditConfigItem("订阅缓存"),
+                        EditModel("start_script_file", InputPoster(context)),
+                    child: EditConfigItem("启动脚本"),
+                  ),
+                  ChangeNotifierProvider(
+                    create: (context) =>
+                        EditModel("stop_script_file", InputPoster(context)),
+                    child: EditConfigItem("停用脚本"),
                   ),
                   TitleItem("V2ray配置"),
                   ChangeNotifierProvider(
@@ -83,16 +88,17 @@ class MainPage extends StatelessWidget {
                   ),
                   ChangeNotifierProvider(
                     create: (context) =>
-                        EditModel("ssr_config_file", InputPoster(context)),
-                    child: EditConfigItem("配置目录"),
-                  ),
-                  ChangeNotifierProvider(
-                    create: (context) =>
                         EditModel("ssr_sub_url", InputPoster(context)),
                     child: EditConfigItem("订阅地址"),
                   ),
                   SubControlItem("ssr"),
                   TitleItem("其他参数"),
+                  ChangeNotifierProvider(
+                    create: (context) =>
+                        EditModel("sub_cache_folder", InputPoster(context)),
+                    child: EditConfigItem("订阅缓存"),
+                  ),
+                  JustForwardItem(),
                 ],
               ),
               Align(

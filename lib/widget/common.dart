@@ -182,24 +182,6 @@ class SelectConfigItem extends StatelessWidget {
   }
 }
 
-//仅展示项
-class ShowConfigItem extends StatelessWidget {
-  final String name;
-  final String data;
-
-  ShowConfigItem(this.name, this.data);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListItem(
-      name,
-      Text(
-        this.data,
-      ),
-    );
-  }
-}
-
 class SubControlItem extends StatelessWidget {
   final String mKey;
 
@@ -217,6 +199,42 @@ class SubControlItem extends StatelessWidget {
             style: TextStyle(fontSize: 12),
           ),
           onPressed: () => obtainSubWithAction(context, mKey),
+        ),
+      ),
+    );
+  }
+}
+
+class JustForwardItem extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListItem(
+      "仅转发",
+      SizedBox(
+        height: 28,
+        child: Row(
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: 8, right: 8),
+              child: ElevatedButton(
+                child: Text(
+                  "开启",
+                  style: TextStyle(fontSize: 12),
+                ),
+                onPressed: () => justForwardWithAction(context, true),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 8, right: 8),
+              child: ElevatedButton(
+                child: Text(
+                  "关闭",
+                  style: TextStyle(fontSize: 12),
+                ),
+                onPressed: () => justForwardWithAction(context, false),
+              ),
+            ),
+          ],
         ),
       ),
     );

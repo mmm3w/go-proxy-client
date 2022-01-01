@@ -32,11 +32,14 @@ showServerDialog(
       builder: (context) {
         return AlertDialog(
           content: ListView.builder(
+            padding: EdgeInsets.zero,
+            physics: BouncingScrollPhysics(),
+            shrinkWrap: true,
             itemCount: data.length,
             itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
+              return ElevatedButton(
                 child: Text(data[index].name),
-                onTap: () {
+                onPressed: () {
                   Navigator.of(context).pop(index);
                   onSelect(data[index]);
                 },

@@ -7,6 +7,19 @@ import 'request.dart';
 import '../widget/support.dart';
 import 'common.dart';
 
+obtainSubWithAction(BuildContext context, String type) {
+  onUiAction(() {
+    return obtainSub(type).then((value) => showSnackBar(context, value));
+  }, context);
+}
+
+justForwardWithAction(BuildContext context, bool enable) {
+  onUiAction(() {
+    return justForward(enable)
+        .then((value) => showSnackBar(context, enable ? "开启成功" : "关闭成功"));
+  }, context);
+}
+
 class InputPoster extends Poster<EditModel, String> {
   final BuildContext context;
 
@@ -36,13 +49,13 @@ class ServerSelectPoster extends Poster<ServerSelectModel, NiData> {
   requestList(BuildContext context, ServerSelectModel model) {
     onUiAction(() {
       return serverConfig(model.key).then((value) => showServerDialog(
-          context, value, (data) => postValue(context, model, data)));
+          context, value.reversed.toList(), (data) => postValue(context, model, data)));
     }, context);
   }
 
   postValue(BuildContext context, ServerSelectModel model, NiData niData) {
     onUiAction(() {
-      return putValue(model.key, json.encode(niData)).then((value) {
+      return applyConfig(model.key, json.encode(niData)).then((value) {
         model.setData(niData);
         showSnackBar(context, "设置成功");
       });
@@ -74,10 +87,4 @@ class SwitchControlPoster {
           context);
     }
   }
-}
-
-obtainSubWithAction(BuildContext context, String type) {
-  onUiAction(() {
-    return obtainSub(type).then((value) => showSnackBar(context, value));
-  }, context);
 }

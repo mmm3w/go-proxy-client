@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_proxy_client/widget/support.dart';
 import 'entity.dart';
 import 'poster.dart';
 import 'request.dart';
@@ -103,3 +102,23 @@ class ServerSelectModel with ChangeNotifier {
     poster.post(this, null);
   }
 }
+
+class MarkModel with ChangeNotifier {
+  bool isConfigChange = false;
+
+  void markChange() {
+    if (isConfigChange) return;
+    isConfigChange = true;
+    notifyListeners();
+  }
+
+  void clearChange() {
+    if (!isConfigChange) return;
+    isConfigChange = false;
+    notifyListeners();
+  }
+}
+
+class V2rayMarkModel extends MarkModel {}
+
+class SsrMarkModel extends MarkModel {}
