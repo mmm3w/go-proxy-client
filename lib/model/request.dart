@@ -8,7 +8,7 @@ import 'entity.dart';
 // import 'model/entity.dart';
 //
 // // var domain = "http://localhost";
-var domain = "http://10.233.1.2:12345";
+var domain = "http://10.233.1.3:12345";
 // // var domain = "http://192.168.0.34";
 
 //
